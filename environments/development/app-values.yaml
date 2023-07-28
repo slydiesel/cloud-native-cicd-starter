@@ -8,7 +8,7 @@ image:
   repository: krumware/python-docs-hello-world
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "20230728T141052"
 
 imagePullSecrets:
   - name: docker-push-user
@@ -46,7 +46,6 @@ ingress:
   enabled: true
   className: "traefik"
   annotations:
-    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
