@@ -53,10 +53,10 @@ ingress:
       paths:
         - path: /api/examplepy
           pathType: Prefix
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+   - secretName: python-example-tls
+     hosts:
+       - rancher.131.153.227.137.sslip.io
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
