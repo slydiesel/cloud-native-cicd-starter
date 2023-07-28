@@ -8,8 +8,8 @@ image:
   repository: krumware/python-docs-hello-world
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "20230728T141052"
 
+  tag: "20230728T143232"
 imagePullSecrets:
   - name: docker-push-user
 
@@ -36,8 +36,8 @@ securityContext: {}
   #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
-  # runAsUser: 1000
 
+# runAsUser: 1000
 service:
   type: ClusterIP
   port: 5000
@@ -65,8 +65,8 @@ resources: {}
   #   memory: 128Mi
   # requests:
   #   cpu: 100m
-  #   memory: 128Mi
 
+#   memory: 128Mi
 autoscaling:
   enabled: false
   minReplicas: 1
