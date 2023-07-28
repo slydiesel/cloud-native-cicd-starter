@@ -14,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: development
   source:
-    path: bitnami/wordpress
-    repoURL: git@github.com:bitnami/charts.git
+    path: helm/python-docs-hello-world
+    repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
     targetRevision: HEAD
   project: development

@@ -11,6 +11,7 @@ github:
   # the list of repositories to build on push events
   repositories:
   - krum-web-api
+  - python-docs-hello-world
   # configures where automated tagging commits are sent
   automateCommits: false
   deploymentRepository: cloud-native-cicd-starter
@@ -39,6 +40,9 @@ githubRepoToDockerRepo: |
   {
     "krum-web-api": {
       "master": "krum-web-api"
+    },
+    "python-docs-hello-world": {
+      "master": "python-docs-hello-world"
     }
   }
 
