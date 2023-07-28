@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: {{ .Release.Name }}-github
+  name: {{ .Release.Name }}-github-eventsource
 spec:
   service:
     ports:
@@ -47,9 +47,6 @@ spec:
         # Key within the K8s secret whose corresponding value (must be base64 encoded) is access token
         key: {{ .Values.github.machineUserToken.key }}
 
-      webhookSecret: 
-        name: {{ .Values.github.webhookSecret.name}}
-        key: {{ .Values.github.webhookSecret.key}}
 
       # type of the connection between event-source and Github.
       # You should set it to false to avoid man-in-the-middle and other attacks.

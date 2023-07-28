@@ -10,7 +10,7 @@ github:
   owner: krumIO
   # the list of repositories to build on push events
   repositories:
-  - krum-web-2
+  - krum-web-api
   # configures where automated tagging commits are sent
   automateCommits: false
   deploymentRepository: cloud-native-cicd-starter
@@ -18,7 +18,7 @@ github:
 
   # configures our expected inbound webhook route which Github will be 
   webhook:
-    hostname: https://rancher.131.153.227.137.sslip.io/api/v1/namespaces/argocd/services/http:argo-workflows-server:2746/proxy/
+    hostname: https://rancher.131.153.227.137.sslip.io
     port: 12000
     endpoint: /api/webhook
 
@@ -37,8 +37,8 @@ github:
 
 githubRepoToDockerRepo: |
   {
-    "krum-web-2": {
-      "master": "krum-web-2"
+    "krum-web-api": {
+      "master": "krum-web-api"
     }
   }
 

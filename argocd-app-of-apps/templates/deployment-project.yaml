@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ .Values.spec.project }}
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: Mozart project shell.
+  destinations:
+    - name: in-cluster
+      namespace: {{ .Values.spec.destination.namespace }}
+      server: {{ .Values.spec.destination.server }}
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - {{ .Values.spec.source.repoURL }}

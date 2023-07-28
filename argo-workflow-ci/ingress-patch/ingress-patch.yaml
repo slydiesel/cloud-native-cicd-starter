@@ -14,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: <event_source_svc_name>
+                name:  argo-workflow-ci-github-eventsource-eventsource-svc
                 port:
                   number: 12000

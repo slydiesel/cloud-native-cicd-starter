@@ -122,7 +122,7 @@ spec:
           - |
             apk update && apk upgrade
             apk add git
-            git clone --branch \"{{`{{inputs.parameters.git_branch}}`}}\" --single-branch \"https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{`{{inputs.parameters.git_owner}}`}}/{{`{{inputs.parameters.git_repo}}`}}.git\"
+            git clone --branch {{`{{inputs.parameters.git_branch}}`}} --single-branch https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{`{{inputs.parameters.git_owner}}`}}/{{`{{inputs.parameters.git_repo}}`}}.git
     - name: build
       metadata:
         annotations:
@@ -163,7 +163,7 @@ spec:
           - |
             apk update && apk upgrade
             apk add jq
-            jq -r </etc/config/repositoryMap.json '.[\"{{`{{inputs.parameters.git_repo}}`}}\"][\"{{`{{inputs.parameters.git_branch}}`}}\"]' > /etc/dockertarget/result.txt
+            jq -r </etc/config/repositoryMap.json '.["{{`{{inputs.parameters.git_repo}}`}}"]["{{`{{inputs.parameters.git_branch}}`}}"]' > /etc/dockertarget/result.txt
         mirrorVolumeMounts: true
       container:
         image: moby/buildkit:v0.11.6-rootless
