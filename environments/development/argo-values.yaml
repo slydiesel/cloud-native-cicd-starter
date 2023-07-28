@@ -14,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: development
   source:
-    path: helm/python-docs-hello-world
+    path: helm/example-umbrella
     repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
     targetRevision: HEAD
   project: development

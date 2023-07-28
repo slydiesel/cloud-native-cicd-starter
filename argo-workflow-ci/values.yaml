@@ -10,10 +10,9 @@ github:
   owner: krumIO
   # the list of repositories to build on push events
   repositories:
-  - krum-web-api
   - python-docs-hello-world
   # configures where automated tagging commits are sent
-  automateCommits: false
+  automateCommits: true
   deploymentRepository: cloud-native-cicd-starter
   deploymentFolderPath: environments/development
 
