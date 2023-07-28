@@ -51,7 +51,7 @@ ingress:
   hosts:
     - host: rancher.131.153.227.137.sslip.io
       paths:
-        - path: /examplepy
+        - path: /api/examplepy
           pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
