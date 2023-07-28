@@ -234,6 +234,7 @@ spec:
           - /bin/sh
           - -c
         args:
+          # yq '.{{`{{inputs.parameters.git_repo}}`}}.image.tag = "{{`{{inputs.parameters.docker_image_tag}}`}}"' -i app-values-old.yaml
           - |
             apk update && apk upgrade
             apk add git diffutils patch
@@ -243,7 +244,7 @@ spec:
             git clone https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{ .Values.github.owner }}/{{ .Values.github.deploymentRepository }}.git
             cd {{ .Values.github.deploymentRepository }}/{{ .Values.github.deploymentFolderPath }}
             cp app-values.yaml app-values-old.yaml
-            yq '.{{`{{inputs.parameters.git_repo}}`}}.image.tag = "{{`{{inputs.parameters.docker_image_tag}}`}}"' -i app-values-old.yaml
+            yq '.image.tag = "{{`{{inputs.parameters.docker_image_tag}}`}}"' -i app-values-old.yaml
             diff -wB app-values.yaml app-values-old.yaml > app-values.yaml.diff
             patch -o app-values.yaml.new app-values.yaml < app-values.yaml.diff
             rm app-values.yaml
