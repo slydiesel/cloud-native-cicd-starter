@@ -7,7 +7,7 @@ example-laravel-app:
   enabled: true
   image:
     repository: krumware/example-laravel-app
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
   imagePullSecrets:
@@ -39,7 +39,7 @@ python-docs-hello-world:
   enabled: true
   image:
     repository: krumware/python-docs-hello-world
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "20230728T141052"
   imagePullSecrets:
