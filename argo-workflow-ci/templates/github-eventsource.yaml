@@ -1,0 +1,60 @@
+# Info on GitHub Webhook: https://developer.github.com/v3/repos/hooks/#create-a-hook
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: {{ .Release.Name }}-github
+spec:
+  service:
+    ports:
+      - name: example
+        port: {{ .Values.github.webhook.port }}
+        targetPort: {{ .Values.github.webhook.port }}
+  github:
+    example:
+      repositories:
+        - owner: {{ .Values.github.owner }}
+          {{- with .Values.github.repositories }}
+          names:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+      # Github application auth. Instead of using personal token `apiToken` use app PEM            
+      # Github will send events to following port and endpoint
+      webhook:
+        # endpoint to listen to events on
+        endpoint: {{ .Values.github.webhook.endpoint }}
+        # port to run internal HTTP server on
+        port: "{{ .Values.github.webhook.port }}"
+        # HTTP request method to allow. In this case, only POST requests are accepted
+        method: POST
+        # url the event-source will use to register at Github.
+        # This url must be reachable from outside the cluster.
+        # The name for the service is in `<event-source-name>-eventsource-svc` format.
+        # You will need to create an Ingress or Openshift Route for the event-source service so that it can be reached from GitHub.
+        url: {{ .Values.github.webhook.hostname }}
+        # You can find more info on https://developer.github.com/v3/activity/events/types/
+      events:
+        - "*"
+      {{- with .Values.github.githubApp }}
+      githubApp:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      # apiToken refers to K8s secret that stores the github api token
+      # if apiToken is provided controller will create webhook on GitHub git_repo
+      apiToken:
+        # Name of the K8s secret that contains the access token
+        name: {{ .Values.github.machineUserToken.name }}
+        # Key within the K8s secret whose corresponding value (must be base64 encoded) is access token
+        key: {{ .Values.github.machineUserToken.key }}
+
+      webhookSecret: 
+        name: {{ .Values.github.webhookSecret.name}}
+        key: {{ .Values.github.webhookSecret.key}}
+
+      # type of the connection between event-source and Github.
+      # You should set it to false to avoid man-in-the-middle and other attacks.
+      insecure: false
+      # Determines if notifications are sent when the webhook is triggered
+      active: true
+      # The media type used to serialize the payloads
+      contentType: json

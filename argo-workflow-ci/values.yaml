@@ -1,0 +1,44 @@
+# Default values for argo-workflows.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+docker:
+  owner: krumware
+  secretName: docker-push-user
+
+github:
+  # github repository owner
+  owner: krumIO
+  # the list of repositories to build on push events
+  repositories:
+  - krum-web-2
+  # configures where automated tagging commits are sent
+  automateCommits: false
+  deploymentRepository: cloud-native-cicd-starter
+  deploymentFolderPath: environments/development
+
+  # configures our expected inbound webhook route which Github will be 
+  webhook:
+    hostname: https://rancher.131.153.227.137.sslip.io/api/v1/namespaces/argocd/services/http:argo-workflows-server:2746/proxy/
+    port: 12000
+    endpoint: /api/webhook
+
+  # allows webhook creation & commit automation  
+  machineUserToken:
+    name: github-machine-user
+    key: token
+
+  # githubApp:
+  #   privateKey:
+  #     name: repo-secret-name
+  #     key: githubAppPrivateKey
+  #   appID: 123456
+  #   installationID: 12345678
+
+
+githubRepoToDockerRepo: |
+  {
+    "krum-web-2": {
+      "master": "krum-web-2"
+    }
+  }
+

@@ -1,0 +1,19 @@
+spec:
+  rules:
+    - host: <workflows_host_name>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argo-workflows-server
+                port:
+                  number: 80
+          - path: /api/webhook
+            pathType: Prefix
+            backend:
+              service:
+                name: <event_source_svc_name>
+                port:
+                  number: 12000

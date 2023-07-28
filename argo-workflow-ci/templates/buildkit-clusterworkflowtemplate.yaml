@@ -1,0 +1,256 @@
+# SUMMARY:
+#
+# Build and push an image using Docker Buildkit.
+#
+# DESCRIPTION:
+#
+# This does not need privileged access, unlike Docker in Docker (DIND). It has three stages:
+#
+# * clone the Git repository
+# * build the binary
+# * build and push the image containing the binary
+#
+# REFERENCES:
+#
+# * https://github.com/moby/buildkit#expose-buildkit-as-a-tcp-service
+# * https://blog.alexellis.io/building-containers-without-docker/
+# * https://hub.docker.com/r/moby/buildkit
+#
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: {{ .Release.Name }}-build-template
+spec:
+  arguments:
+    parameters:
+      # git
+      - name: git_owner
+        value: "krumIO"
+      - name: git_repo
+        value: "krum-web-2"
+      - name: git_branch
+        value: "master"
+      # docker
+      - name: docker_image_tag
+        value: "{{`{{workflow.creationTimestamp.Y}}{{workflow.creationTimestamp.m}}{{workflow.creationTimestamp.d}}T{{workflow.creationTimestamp.H}}{{workflow.creationTimestamp.M}}{{workflow.creationTimestamp.S}}`}}"
+      - name: docker_server
+        value: "docker.io"
+      - name: docker_owner
+        value: "{{ .Values.docker.owner }}"
+  entrypoint: main
+  # We use a volume claim template so that we can have a shared workspace.
+  volumeClaimTemplates:
+    - metadata:
+        name: work
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: clone
+            template: clone
+            arguments:
+              parameters:
+                - name: git_owner
+                  value: "{{`{{workflow.parameters.git_owner}}`}}"
+                - name: git_repo
+                  value: "{{`{{workflow.parameters.git_repo}}`}}"
+                - name: git_branch
+                  value: '{{`{{=sprig.replace("refs/heads/","",workflow.parameters.git_branch)}}`}}'
+                  # value: "{{`{{workflow.parameters.git_branch}}`}}"
+          - name: build
+            template: build
+            arguments:
+              parameters:
+                - name: git_owner
+                  value: "{{`{{workflow.parameters.git_owner}}`}}"
+                - name: git_repo
+                  value: "{{`{{workflow.parameters.git_repo}}`}}"
+                - name: git_branch
+                  value: '{{`{{=sprig.replace("refs/heads/","",workflow.parameters.git_branch)}}`}}'
+                  # value: "{{`{{workflow.parameters.git_branch}}`}}"
+                - name: docker_image_tag
+                  value: "{{`{{workflow.parameters.docker_image_tag}}`}}"
+                - name: docker_server
+                  value: "{{`{{workflow.parameters.docker_server}}`}}"
+                - name: docker_owner
+                  value: "{{`{{workflow.parameters.docker_owner}}`}}"
+            depends: "clone"
+          {{ if .Values.github.automateCommits }}
+          - name: deploy
+            template: deploy
+            arguments:
+              parameters:
+                - name: git_repo
+                  value: "{{`{{workflow.parameters.git_repo}}`}}"
+                - name: docker_image_tag
+                  value: "{{`{{workflow.parameters.docker_image_tag}}`}}"
+            depends: "build"
+          {{ end }}
+    # Clone our source repository to the "work" directory
+    - name: clone
+      inputs:
+        parameters:
+          - name: git_owner
+          - name: git_repo
+          - name: git_branch
+      container:
+        volumeMounts:
+          - mountPath: /work
+            name: work
+        image: alpine:latest
+        workingDir: /work
+        env:
+          - name: MACHINE_USER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.github.machineUserToken.name }}     # name of an existing k8s secret
+                key: username
+          - name: MACHINE_USER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.github.machineUserToken.name }}     # name of an existing k8s secret
+                key: token
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            apk update && apk upgrade
+            apk add git
+            git clone --branch \"{{`{{inputs.parameters.git_branch}}`}}\" --single-branch \"https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{`{{inputs.parameters.git_owner}}`}}/{{`{{inputs.parameters.git_repo}}`}}.git\"
+    - name: build
+      metadata:
+        annotations:
+          container.apparmor.security.beta.kubernetes.io/main: unconfined
+      inputs:
+        parameters:
+          - name: git_owner
+          - name: git_repo
+          - name: git_branch
+          - name: docker_image_tag
+          - name: docker_server
+          - name: docker_owner
+      # Mount the configuration so we can push the image.
+      # This should create the /.docker/config.json file.
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: {{ .Values.docker.secretName }}
+            items:
+            - key: .dockerconfigjson
+              path: config.json
+        - name: repository-map
+          configMap:
+            name: {{ .Release.Name }}-repository-map
+        - name: docker-target-repo
+          emptyDir: {}
+      # Our init container will fetch the target docker repo basedon:
+      # - git repo
+      # - git branch
+      # Refer to argo-workflows/repository-map/repositoryMap.json
+      initContainers:
+      - name: configure-target-docker-repo
+        image: alpine:latest
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            apk update && apk upgrade
+            apk add jq
+            jq -r </etc/config/repositoryMap.json '.[\"{{`{{inputs.parameters.git_repo}}`}}\"][\"{{`{{inputs.parameters.git_branch}}`}}\"]' > /etc/dockertarget/result.txt
+        mirrorVolumeMounts: true
+      container:
+        image: moby/buildkit:v0.11.6-rootless
+        securityContext:
+          # Needs Kubernetes >= 1.19
+          seccompProfile:
+            type: Unconfined
+          # To change UID/GID, you need to rebuild the image
+          runAsUser: 1000
+          runAsGroup: 1000
+        volumeMounts:
+          - name: work
+            mountPath: /work
+          - name: docker-config
+            mountPath: /.docker
+          - name: repository-map
+            mountPath: /etc/config/
+          - name: docker-target-repo
+            mountPath: /etc/dockertarget/
+        workingDir: /work/{{`{{inputs.parameters.git_repo}}`}}
+        env:
+          - name: BUILDKITD_FLAGS
+            value: --oci-worker-no-process-sandbox
+          - name: DOCKER_CONFIG
+            value: /.docker
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            export DOCKER_TARGET=$(cat /etc/dockertarget/result.txt)
+            buildctl-daemonless.sh build --frontend dockerfile.v0 --local context=. --local dockerfile=. --output type=image,name={{`{{inputs.parameters.docker_server}}`}}/{{`{{inputs.parameters.docker_owner}}`}}/${DOCKER_TARGET}:{{`{{inputs.parameters.docker_image_tag}}`}},push=true
+    - name: deploy
+      inputs:
+        parameters:
+          - name: git_repo
+          - name: docker_image_tag
+      retryStrategy:
+        limit: 10
+        retryPolicy: "Always"
+        backoff:
+          duration: "15"      # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: 2
+          maxDuration: "5m"  # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+      container:
+        volumeMounts:
+          - mountPath: /work
+            name: work
+        image: alpine:latest
+        workingDir: /work
+        env:
+          - name: MACHINE_USER_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.github.machineUserToken.name }}     # name of an existing k8s secret
+                key: email
+          - name: MACHINE_USER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.github.machineUserToken.name }}     # name of an existing k8s secret
+                key: username
+          - name: MACHINE_USER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.github.machineUserToken.name }}     # name of an existing k8s secret
+                key: token
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            apk update && apk upgrade
+            apk add git diffutils patch
+            apk add yq --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+            git config --global user.email "$MACHINE_USER_EMAIL"
+            git config --global user.name "$MACHINE_USER_NAME"
+            git clone https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{ .Values.github.owner }}/{{ .Values.github.deploymentRepository }}.git
+            cd {{ .Values.github.deploymentRepository }}/{{ .Values.github.deploymentFolderPath }}
+            cp app-values.yaml app-values-old.yaml
+            yq '.{{`{{inputs.parameters.git_repo}}`}}.image.tag = "{{`{{inputs.parameters.docker_image_tag}}`}}"' -i app-values-old.yaml
+            diff -wB app-values.yaml app-values-old.yaml > app-values.yaml.diff
+            patch -o app-values.yaml.new app-values.yaml < app-values.yaml.diff
+            rm app-values.yaml
+            mv app-values.yaml.new app-values.yaml
+            rm app-values.yaml.diff
+            rm app-values-old.yaml
+            git add app-values.yaml
+            git commit -m "[WORKFLOWS] update {{`{{inputs.parameters.git_repo}}`}} to tag: {{`{{inputs.parameters.docker_image_tag}}`}}"
+            git pull -s recursive -X ours https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{ .Values.github.owner }}/{{ .Values.github.deploymentRepository }}.git HEAD:refs/heads/main
+            git push https://$MACHINE_USER_NAME:$MACHINE_USER_TOKEN@github.com/{{ .Values.github.owner }}/{{ .Values.github.deploymentRepository }}.git HEAD:refs/heads/main

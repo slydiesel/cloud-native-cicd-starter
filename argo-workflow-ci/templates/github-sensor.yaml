@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: {{ .Release.Name }}-github-sensor
+spec:
+  template:
+    serviceAccountName: {{ .Release.Name }}-operate-workflow-sa
+  dependencies:
+    - name: dependencies
+      eventSourceName: {{ .Release.Name }}-github-eventsource
+      eventName: example
+      filters:
+        data:
+          # Type of Github event that triggered the delivery: [pull_request, push, issues, label, ...]
+          # https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads
+          - path: headers.X-Github-Event
+            type: string
+            value:
+              - push
+          - path: body.ref
+            type: string
+            value:
+              - refs/heads/master
+  triggers:
+    - template:
+        name: github-workflow-trigger
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: github-webhook-ci-
+              spec:
+                arguments:
+                  parameters:
+                    - name: git_owner
+                    - name: git_repo
+                    - name: git_branch
+                workflowTemplateRef:
+                  name: {{ .Release.Name }}-build-template
+                  clusterScope: true
+          parameters:
+          # git_owner
+          - dest: spec.arguments.parameters.0.value
+            src:
+              dependencyName: dependencies
+              dataKey: body.organization.login
+          # git_repo
+          - dest: spec.arguments.parameters.1.value
+            src:
+              dependencyName: dependencies
+              dataKey: body.repository.name
+          # git_branch
+          - dest: spec.arguments.parameters.2.value
+            src:
+              value: master
+              dependencyName: dependencies
+              dataKey: body.ref
+      retryStrategy:
+        steps: 3
