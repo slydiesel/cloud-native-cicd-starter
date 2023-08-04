@@ -45,6 +45,12 @@ githubRepoToDockerRepo: |
     },
     "python-docs-hello-world": {
       "master": "python-docs-hello-world"
+    },
+    "baseline-react-app": {
+      "main": "baseline-react-app"
+    },
+    "baseline-vue-app": {
+      "main": "baseline-vue-app"
     }
   }
 
