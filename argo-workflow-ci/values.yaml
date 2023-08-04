@@ -11,6 +11,9 @@ github:
   # the list of repositories to build on push events
   repositories:
   - python-docs-hello-world
+  - baseline-react-app
+  - baseline-vue-app
+  - example-laravel-app
   # configures where automated tagging commits are sent
   automateCommits: true
   deploymentRepository: cloud-native-cicd-starter

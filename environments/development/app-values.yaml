@@ -2,6 +2,43 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+baseline-vue-app:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: "traefik"
+    annotations:
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: rancher.131.153.227.137.sslip.io
+        paths:
+          - path: /vue
+            pathType: Prefix
+    tls: []
+
+
+baseline-react-app:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: "traefik"
+    annotations:
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: rancher.131.153.227.137.sslip.io
+        paths:
+          - path: /react
+            pathType: Prefix
+    tls: []
+
 
 example-laravel-app:
   enabled: true
