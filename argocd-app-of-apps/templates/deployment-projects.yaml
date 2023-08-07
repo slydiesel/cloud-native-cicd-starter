@@ -1,0 +1,26 @@
+{{- range $env := $.Values.spec.environments }}
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ $env.name }}
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  description: Mozart project shell.
+  destinations:
+    - name: in-cluster
+      namespace: {{ $env.destination.namespace }}
+      server: {{ $env.destination.server }}
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - {{ $.Values.gitops.repoURL }}
+    {{- range $app := $.Values.spec.applications }}
+    {{- if or (not $env.applicationFilter) (has $app.name $env.applicationFilter)}}
+    - {{ $app.repoURL }}
+    {{- end }}
+    {{- end }}
+---
+{{- end }}

@@ -1,0 +1,41 @@
+{{- range $env := $.Values.spec.environments }}
+{{- range $app := $.Values.spec.applications }}
+{{- if or (not $env.applicationFilter) (has $app.name $env.applicationFilter)}}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $env.name }}-{{ $app.name }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  syncPolicy:
+    {{- if $env.syncOverrides }}
+    {{- toYaml $env.syncOverrides.syncPolicy | nindent 4 }}
+    {{- else }}
+    {{- toYaml $.Values.syncPolicy | nindent 4 }}
+    {{- end }}
+  destination:
+    namespace: {{ $env.destination.namespace }}
+    server: {{ $env.destination.server }}
+  project: {{ $env.name }}
+  sources:
+  # secret needs to be deployed for this repo
+  - repoURL: {{ $app.repoURL }}
+    path: {{ $app.path }}
+    targetRevision: {{ $app.targetRevision }}
+    helm:
+      valueFiles:
+        - $values/{{ $env.path }}/{{ $app.name }}-values.yaml
+  - repoURL: {{ $.Values.gitops.repoURL }}
+    targetRevision: {{ $env.targetRevision }}
+    ref: values
+  - repoURL: {{ $.Values.gitops.repoURL }}
+    path: argocd-app-of-apps
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - {{ $.Values.gitops.values }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

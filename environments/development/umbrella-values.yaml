@@ -14,9 +14,9 @@ baseline-vue-app:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: rancher.131.153.227.137.sslip.io
+      - host: vue.131.153.227.137.sslip.io
         paths:
-          - path: /vue
+          - path: /
             pathType: Prefix
     tls: []
 
@@ -33,9 +33,9 @@ baseline-react-app:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: rancher.131.153.227.137.sslip.io
+      - host: react.131.153.227.137.sslip.io
         paths:
-          - path: /react
+          - path: /
             pathType: Prefix
     tls: []
 
@@ -59,9 +59,9 @@ example-laravel-app:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: rancher.131.153.227.137.sslip.io
+      - host: laravel.131.153.227.137.sslip.io
         paths:
-          - path: /laravel
+          - path: /
             pathType: Prefix
     tls: []
   resources: {}
