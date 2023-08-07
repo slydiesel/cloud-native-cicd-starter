@@ -30,11 +30,11 @@ spec:
     targetRevision: {{ $env.targetRevision }}
     ref: values
   - repoURL: {{ $.Values.gitops.repoURL }}
-    path: argocd-app-of-apps
+    path: ./argocd-app-of-apps
     targetRevision: HEAD
     helm:
       valueFiles:
-        - {{ $.Values.gitops.values }}
+        - $values/{{ $.Values.gitops.values }}
 ---
 {{- end }}
 {{- end }}
