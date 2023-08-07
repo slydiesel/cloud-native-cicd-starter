@@ -57,5 +57,5 @@ spec:
             - CreateNamespace=true
       # filter applications that make it to production
       applicationFilter:
-        - umbrella
+        - baseline-react
 
