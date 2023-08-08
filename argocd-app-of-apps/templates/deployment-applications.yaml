@@ -5,8 +5,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ $env.name }}-{{ $app.name }}
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
 spec:
   syncPolicy:
     {{- if $env.syncOverrides }}
@@ -29,12 +27,6 @@ spec:
   - repoURL: {{ $.Values.gitops.repoURL }}
     targetRevision: {{ $env.targetRevision }}
     ref: values
-  - repoURL: {{ $.Values.gitops.repoURL }}
-    path: ./argocd-app-of-apps
-    targetRevision: HEAD
-    helm:
-      valueFiles:
-        - $values/{{ $.Values.gitops.values }}
 ---
 {{- end }}
 {{- end }}

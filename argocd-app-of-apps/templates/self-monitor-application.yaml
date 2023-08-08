@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Release.Name }}-self-monitor
+spec:
+  syncPolicy:
+    {{- toYaml $.Values.syncPolicy | nindent 4 }}
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  # secret needs to be deployed for this repo
+  - repoURL: {{ .Values.gitops.repoURL }}
+    path: ./argocd-app-of-apps
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - $values/app-of-apps-values.yaml
+  - repoURL: {{ $.Values.gitops.repoURL }}
+    targetRevision: HEAD
+    ref: values
+---
