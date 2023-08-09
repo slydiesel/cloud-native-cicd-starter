@@ -22,6 +22,7 @@ github:
 
   # configures our expected inbound webhook route which Github will be 
   webhook:
+    domain: rancher.131.153.227.137.sslip.io
     hostname: https://rancher.131.153.227.137.sslip.io
     port: 12000
     endpoint: /api/webhook

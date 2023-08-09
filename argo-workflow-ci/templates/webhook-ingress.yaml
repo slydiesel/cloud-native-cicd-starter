@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: {{ .Values.github.webhook.hostname }}
+    - host: {{ .Values.github.webhook.domain }}
       http:
         paths:
           - backend:
