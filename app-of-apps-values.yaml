@@ -4,7 +4,6 @@ syncPolicy:
   automated:
     prune: true
     selfHeal: true
-    allowEmpty: true
   syncOptions:
     - CreateNamespace=true
 gitops:
@@ -12,26 +11,34 @@ gitops:
   values: app-of-apps-values.yaml
 spec:
   applications:
-    - name: umbrella
-      path: helm/example-umbrella
+    # - name: umbrella
+    #   path: helm/example-umbrella
+    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+    #   targetRevision: HEAD
+    # - name: baseline-wp
+    #   path: helm/baseline-wp-microsite
+    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+    #   targetRevision: HEAD
+    - name: baseline-golang
+      path: helm/baseline-golang-app
       repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
-    # - name: baseline-react
-    #   path: helm/baseline-react-app
-    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
-    #   targetRevision: HEAD
-    # - name: baseline-vue
-    #   path: helm/baseline-vue-app
-    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
-    #   targetRevision: HEAD
-    # - name: baseline-laravel
-    #   path: helm/baseline-laravel-app
-    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
-    #   targetRevision: HEAD
-    # - name: python-hello-world
-    #   path: helm/python-docs-hello-world
-    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
-    #   targetRevision: HEAD
+    - name: baseline-react
+      path: helm/baseline-react-app
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+      targetRevision: HEAD
+    - name: baseline-vue
+      path: helm/baseline-vue-app
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+      targetRevision: HEAD
+    - name: baseline-laravel
+      path: helm/baseline-laravel-app
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+      targetRevision: HEAD
+    - name: python-hello-world
+      path: helm/python-docs-hello-world
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+      targetRevision: HEAD
   environments:
     - name: development
       path: environments/development
@@ -39,24 +46,24 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: development
-    - name: staging
-      path: environments/staging
-      targetRevision: HEAD
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: staging
-    - name: production
-      path: environments/production
-      targetRevision: HEAD
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: production
-      # exempt production from automated syncs
-      syncOverrides:
-        syncPolicy:
-          syncOptions:
-            - CreateNamespace=true
-      # filter applications that make it to production
-      applicationFilter:
-        - baseline-react
+    # - name: staging
+    #   path: environments/staging
+    #   targetRevision: HEAD
+    #   destination:
+    #     server: https://kubernetes.default.svc
+    #     namespace: staging
+    # - name: production
+    #   path: environments/production
+    #   targetRevision: HEAD
+    #   destination:
+    #     server: https://kubernetes.default.svc
+    #     namespace: production
+    #   # exempt production from automated syncs
+    #   syncOverrides:
+    #     syncPolicy:
+    #       syncOptions:
+    #         - CreateNamespace=true
+    #   # filter applications that make it to production
+    #   applicationFilter:
+    #     - baseline-wp
 

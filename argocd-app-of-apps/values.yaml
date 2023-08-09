@@ -7,37 +7,37 @@ syncPolicy:
   syncOptions:
     - CreateNamespace=true
 gitops:
-  repoURL: git@github.com:krumIO/cloud-native-cicd-starter.git
+  repoURL: https://github.com/krumIO/cloud-native-cicd-starter.git
   values: app-of-apps-values.yaml
 spec:
   applications:
     # - name: umbrella
     #   path: helm/example-umbrella
-    #   repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
     #   targetRevision: HEAD
     # - name: baseline-wp
     #   path: helm/baseline-wp-microsite
-    #   repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
     #   targetRevision: HEAD
     - name: baseline-golang
       path: helm/baseline-golang-app
-      repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: baseline-react
       path: helm/baseline-react-app
-      repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: baseline-vue
       path: helm/baseline-vue-app
-      repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: baseline-laravel
       path: helm/baseline-laravel-app
-      repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: python-hello-world
       path: helm/python-docs-hello-world
-      repoURL: git@github.com:krumIO/cloud-native-workshop-charts.git
+      repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
   environments:
     - name: development
