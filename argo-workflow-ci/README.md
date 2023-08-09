@@ -77,35 +77,10 @@ This chart contains configurable resources for defining CI and CD flows & proces
 
 3. Deploy
 
-    Ensure there is an Event Bus installed to your Argo Workflows
-
-    ```bash
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/eventbus/native.yaml
-    ```
-
     It is important to install to the same namespace as your Argo installation
 
     ```bash
     helm upgrade --install argo-workflow-ci ./argo-workflow-ci -n argocd # --set github.automateCommits=true
-    ```
-
-    4. Add ingress path for our Github webhook path, point it to the `EventSource`'s generated service
-
-    We will need to gather the following configurations:
-    - Argo Workflows ingress name
-    - Our desired workflows hostname
-    - Our desired webhook path
-    - Our desired webhook port
-    - Our desired `EventSource` service name
-
-    Once we have gathered those resources, we may plug them into our patch file `ingress-patch/ingress-patch.yaml`
-    - `<workflows_host_name>`
-    - `<webhook_path>`
-    - `<event_source_svc_name>`
-    - `<webhook_port>`
-
-    ```bash
-    kubectl patch ingress argo-workflows -n argocd --type merge --patch-file ./argo-workflows/ingress-patch/ingress-patch.yaml
     ```
 
 
