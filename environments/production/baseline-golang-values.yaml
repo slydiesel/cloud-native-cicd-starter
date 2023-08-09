@@ -1,0 +1,22 @@
+image:
+  repository: krumware/baseline-golang-app
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "20230809T044757"
+imagePullSecrets:
+  - name: docker-push-user
+service:
+  type: ClusterIP
+  port: 1323
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: golang-prod.131.153.227.137.sslip.io
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []

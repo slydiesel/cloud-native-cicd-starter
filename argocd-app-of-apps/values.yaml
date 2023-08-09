@@ -11,10 +11,6 @@ gitops:
   values: app-of-apps-values.yaml
 spec:
   applications:
-    # - name: umbrella
-    #   path: helm/example-umbrella
-    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
-    #   targetRevision: HEAD
     # - name: baseline-wp
     #   path: helm/baseline-wp-microsite
     #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
@@ -39,6 +35,10 @@ spec:
       path: helm/python-docs-hello-world
       repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
+    # - name: umbrella
+    #   path: helm/example-umbrella
+    #   repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
+    #   targetRevision: HEAD
   environments:
     - name: development
       path: environments/development
@@ -46,12 +46,12 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: development
-    # - name: staging
-    #   path: environments/staging
-    #   targetRevision: HEAD
-    #   destination:
-    #     server: https://kubernetes.default.svc
-    #     namespace: staging
+    - name: staging
+      path: environments/staging
+      targetRevision: HEAD
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: staging
     # - name: production
     #   path: environments/production
     #   targetRevision: HEAD
