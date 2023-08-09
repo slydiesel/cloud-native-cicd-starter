@@ -2,7 +2,7 @@ image:
   repository: krumware/baseline-golang-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "20230809T044757"
 imagePullSecrets:
   - name: docker-push-user
 service:
