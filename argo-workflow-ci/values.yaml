@@ -14,8 +14,9 @@ github:
   - baseline-react-app
   - baseline-vue-app
   - example-laravel-app
+  - baseline-golang-app
   # configures where automated tagging commits are sent
-  automateCommits: true
+  automateCommits: false
   deploymentRepository: cloud-native-cicd-starter
   deploymentFolderPath: environments/development
 
@@ -51,6 +52,9 @@ githubRepoToDockerRepo: |
     },
     "baseline-vue-app": {
       "main": "baseline-vue-app"
+    },
+    "baseline-golang-app": {
+      "main": "baseline-golang-app"
     }
   }
 

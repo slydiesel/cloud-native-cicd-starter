@@ -32,7 +32,7 @@ spec:
       repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: baseline-laravel
-      path: helm/baseline-laravel-app
+      path: helm/example-laravel-app
       repoURL: https://github.com/krumIO/cloud-native-workshop-charts.git
       targetRevision: HEAD
     - name: python-hello-world
