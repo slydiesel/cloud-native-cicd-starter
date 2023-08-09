@@ -49,6 +49,8 @@ This repository contains an example methodology of deployment following the Argo
 0. Ensure a container image exists and you have an image pull secret in your target namespace
 
 1. Create a chart in your organization's chart repository
+
+    You can kickstart a chart using `helm create`
     
     ```bash
     helm create example-app
@@ -77,6 +79,36 @@ This repository contains an example methodology of deployment following the Argo
 
     This application will now be deployed and auto-synced as expected.
 
+5. Tailor to your application's needs
+
+    Perhaps your chart has environmental variables and potentially some that are sensitive.  You would likely be pulling these in from a `ConfigMap` or a `Secret`.  These references would either be supplied via the chart definitions themselves or fed into the chart by value configurations in our individual app values per environment.  An example of this would be found in `environments/development/baseline-laravel-values.yaml`:
+
+    ```yaml
+    env:
+    - name: APP_NAME
+      valueFrom:
+        secretKeyRef:
+          name: laravel-app-secret
+          key: APP_NAME
+    - name: APP_ENV
+      valueFrom:
+        secretKeyRef:
+          name: laravel-app-secret
+          key: APP_ENV
+    - name: APP_KEY
+      valueFrom:
+        secretKeyRef:
+          name: laravel-app-secret
+          key: APP_KEY
+    ```
+
+    Perhaps your docker repo is private and you need an image pull secret.  You can create a docker registry secret in your environment's namespace and configure an image pull secret in your values like so:
+
+    ```yaml
+    imagePullSecrets:
+    - name: image-pull-secret
+    ```
+
 # Add an environment
 
 1. Create a folder in the `environments` directory
@@ -99,3 +131,5 @@ This repository contains an example methodology of deployment following the Argo
     ```bash
     helm upgrade --install app-of-apps ./argocd-app-of-apps -f app-of-apps-values.yaml -n argocd
     ```
+
+5.  Add any required secrets or config maps to your environment's namespace

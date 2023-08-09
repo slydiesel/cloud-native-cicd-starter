@@ -26,3 +26,220 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+
+env:
+- name: APP_NAME
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: APP_NAME
+- name: APP_ENV
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: APP_ENV
+- name: APP_KEY
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: APP_KEY
+- name: APP_DEBUG
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: APP_DEBUG
+- name: APP_URL
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: APP_URL
+- name: LOG_CHANNEL
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: LOG_CHANNEL
+- name: LOG_DEPRECATIONS_CHANNEL
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: LOG_DEPRECATIONS_CHANNEL
+- name: LOG_LEVEL
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: LOG_LEVEL
+- name: DB_CONNECTION
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_CONNECTION
+- name: DB_HOST
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_HOST
+- name: DB_PORT
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_PORT
+- name: DB_DATABASE
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_DATABASE
+- name: DB_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_USERNAME
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: DB_PASSWORD
+- name: BROADCAST_DRIVER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: BROADCAST_DRIVER
+- name: CACHE_DRIVER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: CACHE_DRIVER
+- name: FILESYSTEM_DRIVER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: FILESYSTEM_DRIVER
+- name: QUEUE_CONNECTION
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: QUEUE_CONNECTION
+- name: SESSION_DRIVER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: SESSION_DRIVER
+- name: SESSION_LIFETIME
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: SESSION_LIFETIME
+- name: MEMCACHED_HOST
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MEMCACHED_HOST
+- name: REDIS_HOST
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: REDIS_HOST
+- name: REDIS_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: REDIS_PASSWORD
+- name: REDIS_PORT
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: REDIS_PORT
+- name: MAIL_MAILER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_MAILER
+- name: MAIL_HOST
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_HOST
+- name: MAIL_PORT
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_PORT
+- name: MAIL_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_USERNAME
+- name: MAIL_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_PASSWORD
+- name: MAIL_ENCRYPTION
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_ENCRYPTION
+- name: MAIL_FROM_ADDRESS
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_FROM_ADDRESS
+- name: MAIL_FROM_NAME
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MAIL_FROM_NAME
+- name: AWS_ACCESS_KEY_ID
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: AWS_ACCESS_KEY_ID
+- name: AWS_SECRET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: AWS_SECRET_ACCESS_KEY
+- name: AWS_DEFAULT_REGION
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: AWS_DEFAULT_REGION
+- name: AWS_BUCKET
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: AWS_BUCKET
+- name: AWS_USE_PATH_STYLE_ENDPOINT
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: AWS_USE_PATH_STYLE_ENDPOINT
+- name: PUSHER_APP_ID
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: PUSHER_APP_ID
+- name: PUSHER_APP_KEY
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: PUSHER_APP_KEY
+- name: PUSHER_APP_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: PUSHER_APP_SECRET
+- name: PUSHER_APP_CLUSTER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: PUSHER_APP_CLUSTER
+- name: MIX_PUSHER_APP_KEY
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MIX_PUSHER_APP_KEY
+- name: MIX_PUSHER_APP_CLUSTER
+  valueFrom:
+    secretKeyRef:
+      name: laravel-app-secret
+      key: MIX_PUSHER_APP_CLUSTER
