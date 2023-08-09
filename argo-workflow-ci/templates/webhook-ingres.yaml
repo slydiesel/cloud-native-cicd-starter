@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: {{ .Values.webhook.hostname }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Release.Name }}-github-eventsource-eventsource-svc
+                port:
+                  number: {{ .Values.webhook.port }}
+            path: {{ .Values.webhook.endpoint }}
+            pathType: Prefix
