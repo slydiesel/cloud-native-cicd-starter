@@ -21,6 +21,7 @@ spec:
             type: string
             value:
               - refs/heads/master
+              - refs/heads/main
   triggers:
     - template:
         name: github-workflow-trigger
