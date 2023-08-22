@@ -5,7 +5,7 @@ image:
 
   tag: "20230822T184641"
 imagePullSecrets:
-  - name: docker-push-user
+  - name: nexus-push-user
 service:
   type: ClusterIP
   port: 1323
