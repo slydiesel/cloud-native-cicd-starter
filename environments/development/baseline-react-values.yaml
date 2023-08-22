@@ -21,7 +21,7 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-  resources:
-    limits:
-      cpu: 200m
-      memory: 500Mi
+resources:
+  limits:
+    cpu: 200m
+    memory: 500Mi

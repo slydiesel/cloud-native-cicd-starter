@@ -20,7 +20,11 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-resources: {}
+resources:
+  limits:
+    cpu: 200m
+    memory: 500Mi
+
 autoscaling:
   enabled: false
   minReplicas: 1

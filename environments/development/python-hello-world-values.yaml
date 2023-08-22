@@ -21,7 +21,10 @@ ingress:
         - path: /api/examplepy
           pathType: Prefix
   tls: []
-resources: {}
+resources:
+  limits:
+    cpu: 200m
+    memory: 300Mi
 autoscaling:
   enabled: false
   minReplicas: 1
