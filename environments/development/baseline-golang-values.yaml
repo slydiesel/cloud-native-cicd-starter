@@ -1,5 +1,5 @@
 image:
-  repository: krumware/baseline-golang-app
+  repository: docker.131.153.227.137.sslip.io/baseline-golang-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
 
