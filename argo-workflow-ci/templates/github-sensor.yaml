@@ -15,7 +15,7 @@ spec:
         exprs:
         {{- range $repo, $repoProps := .Values.github.repositories }}
         {{- range $branch, $dockerRepo := $repoProps.branches }}
-        - expr: type == "push" && repo == "{{ $repo }}" && branch == "refs/heads/{{ $branch }}"
+        - expr: '"push" IN type && repo == "{{ $repo }}" && branch == "refs/heads/{{ $branch }}"'
           fields:
           - name: type
             path: headers.X-Github-Event
