@@ -146,7 +146,22 @@ spec:
               path: config.json
         - name: repository-map
           configMap:
-            name: {{ .Release.Name }}-repository-map
+            name: {{ .Release.Name }}-repository-
+        - name: docker-target-repo
+          emptyDir: {}
+      initContainers:
+      - name: configure-target-docker-repo
+        image: alpine:latest
+        command:
+          - /bin/sh
+          - -c
+        args:
+          - |
+            apk update && apk upgrade
+            apk add yq --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+            export DOCKER_TARGET=$(yq -r </etc/config/repositories.yaml '.["{{`{{inputs.parameters.git_repo}}`}}"].branches["{{`{{inputs.parameters.git_branch}}`}}"]')
+            echo $DOCKER_TARGET > /etc/dockertarget/result.txt
+        mirrorVolumeMounts: true
       container:
         image: moby/buildkit:v0.11.6-rootless
         securityContext:
@@ -163,6 +178,8 @@ spec:
             mountPath: /.docker
           - name: repository-map
             mountPath: /etc/config/
+          - name: docker-target-repo
+            mountPath: /etc/dockertarget/
         workingDir: /work/{{`{{inputs.parameters.git_repo}}`}}
         env:
           - name: BUILDKITD_FLAGS
@@ -174,10 +191,8 @@ spec:
           - -c
         args:
           - |
-            apk update && apk upgrade
-            apk add yq --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
-            export DOCKER_TARGET=$(yq -r </etc/config/repositories.yaml '.["{{`{{inputs.parameters.git_repo}}`}}"].branches["{{`{{inputs.parameters.git_branch}}`}}"]')
-            if [ -z ${DOCKER_TARGET} ]
+            export DOCKER_TARGET=$(cat /etc/dockertarget/result.txt)
+            if [ -n ${DOCKER_TARGET} ]
             then
               buildctl-daemonless.sh build --frontend dockerfile.v0 --local context=. --local dockerfile=. --output type=image,name={{`{{inputs.parameters.docker_server}}`}}/{{`{{inputs.parameters.docker_prefix}}`}}${DOCKER_TARGET}:{{`{{inputs.parameters.docker_image_tag}}`}},push=true
             fi
