@@ -4,6 +4,7 @@ kind: EventSource
 metadata:
   name: {{ .Release.Name }}-github-eventsource
 spec:
+  eventBusName: {{ .Release.Name }}-default-eventbus
   service:
     ports:
       - name: example
