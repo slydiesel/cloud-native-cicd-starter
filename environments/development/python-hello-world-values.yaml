@@ -2,7 +2,8 @@ image:
   repository: krumware/python-docs-hello-world
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "20230728T141052"
+
+  tag: "20230822T151935"
 imagePullSecrets:
   - name: docker-push-user
 service:

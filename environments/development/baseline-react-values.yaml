@@ -2,7 +2,8 @@ image:
   repository: krumware/baseline-react-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+
+  tag: "20230822T154742"
 imagePullSecrets:
   - name: docker-push-user
 service:
