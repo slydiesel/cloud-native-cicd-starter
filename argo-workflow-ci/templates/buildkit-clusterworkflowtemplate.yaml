@@ -146,7 +146,7 @@ spec:
               path: config.json
         - name: repository-map
           configMap:
-            name: {{ .Release.Name }}-repository-
+            name: {{ .Release.Name }}-repository-map
         - name: docker-target-repo
           emptyDir: {}
       initContainers:
