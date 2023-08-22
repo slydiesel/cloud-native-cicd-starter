@@ -2,7 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 docker:
-  owner: krumware
+  server: docker.io
+  prefix: krumware/
   secretName: docker-push-user
 
 github:
@@ -10,11 +11,26 @@ github:
   owner: krumIO
   # the list of repositories to build on push events
   repositories:
-  - python-docs-hello-world
-  - baseline-react-app
-  - baseline-vue-app
-  - example-laravel-app
-  - baseline-golang-app
+    python-docs-hello-world:
+      values: python-hello-world-values.yaml
+      branches:
+        master: "python-docs-hello-world"
+    baseline-react-app:
+      values: baseline-react-values.yaml
+      branches:
+        main: "baseline-react-app"
+    baseline-vue-app:
+      values: baseline-vue-values.yaml
+      branches:
+        main: "baseline-vue-app"
+    example-laravel-app:
+      values: baseline-laravel-values.yaml
+      branches:
+        main: "example-laravel-app"
+    baseline-golang-app:
+      values: baseline-golang-values.yaml
+      branches:
+        main: "baseline-golang-app"
   # configures where automated tagging commits are sent
   automateCommits: false
   deploymentRepository: cloud-native-cicd-starter
@@ -38,24 +54,3 @@ github:
   #     key: githubAppPrivateKey
   #   appID: 123456
   #   installationID: 12345678
-
-
-githubRepoToDockerRepo: |
-  {
-    "krum-web-api": {
-      "master": "krum-web-api"
-    },
-    "python-docs-hello-world": {
-      "master": "python-docs-hello-world"
-    },
-    "baseline-react-app": {
-      "main": "baseline-react-app"
-    },
-    "baseline-vue-app": {
-      "main": "baseline-vue-app"
-    },
-    "baseline-golang-app": {
-      "main": "baseline-golang-app"
-    }
-  }
-

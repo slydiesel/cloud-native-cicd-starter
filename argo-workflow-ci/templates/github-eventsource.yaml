@@ -13,9 +13,9 @@ spec:
     example:
       repositories:
         - owner: {{ .Values.github.owner }}
-          {{- with .Values.github.repositories }}
           names:
-            {{- toYaml . | nindent 10 }}
+          {{- range $key, $val := .Values.github.repositories }}
+          - {{ $key }}
           {{- end }}
       # Github application auth. Instead of using personal token `apiToken` use app PEM            
       # Github will send events to following port and endpoint

@@ -60,19 +60,6 @@ This chart contains configurable resources for defining CI and CD flows & proces
         - `docker.secretName`
         - `docker.owner`
     - Specify the hostname for our inbound webhook from Github
-    - Configure any necessary mapping between Github source repositories/branches to Docker target repositories
-        - `githubRepoToDockerRepo`
-            - This is a JSON object which will determine where image tags are pushed
-            - Format & example:
-                ```json
-                {
-                  "krum-web": {
-                    "master": "krum-web",
-                    "staging": "krum-web_staging",
-                    "production": "krum-web_prod"
-                  }
-                }
-                ```
 
 
 3. Deploy

@@ -3,5 +3,7 @@ apiVersion: v1
 metadata:
   name: {{ .Release.Name }}-repository-map
 data:
-  repositoryMap.json: |
-    {{- .Values.githubRepoToDockerRepo | nindent 4 }}
+  repositories.yaml: |
+    {{- with .Values.github.repositories }}
+    {{- toYaml . | nindent 4 }}
+    {{ end }}
