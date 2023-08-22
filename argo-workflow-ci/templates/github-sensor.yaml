@@ -3,6 +3,7 @@ kind: Sensor
 metadata:
   name: {{ .Release.Name }}-github-sensor
 spec:
+  eventBusName: {{ .Release.Name }}-default-eventbus
   template:
     serviceAccountName: {{ .Release.Name }}-operate-workflow-sa
   dependencies:
