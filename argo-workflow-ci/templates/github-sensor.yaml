@@ -11,18 +11,20 @@ spec:
       eventSourceName: {{ .Release.Name }}-github-eventsource
       eventName: example
       filters:
-        data:
-          # Type of Github event that triggered the delivery: [pull_request, push, issues, label, ...]
-          # https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads
-          - path: headers.X-Github-Event
-            type: string
-            value:
-              - push
-          - path: body.ref
-            type: string
-            value:
-              - refs/heads/master
-              - refs/heads/main
+        exprLogicalOperator: "or"
+        exprs:
+        {{- range $repo, $repoProps := .Values.github.repositories }}
+        {{- range $branch, $dockerRepo := $repoProps.branches }}
+        - expr: type == "push" && repo == "{{ $repo }}" && branch == "refs/heads/{{ $branch }}"
+          fields:
+          - name: type
+            path: headers.X-Github-Event
+          - name: branch
+            path: body.ref 
+          - name: repo
+            path: body.repository.name 
+        {{- end }}       
+        {{- end }}       
   triggers:
     - template:
         name: github-workflow-trigger
