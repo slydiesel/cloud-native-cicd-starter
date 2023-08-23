@@ -47,12 +47,12 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: development
-    - name: staging
-      path: environments/staging
-      targetRevision: HEAD
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: staging
+    # - name: staging
+    #   path: environments/staging
+    #   targetRevision: HEAD
+    #   destination:
+    #     server: https://kubernetes.default.svc
+    #     namespace: staging
     # - name: production
     #   path: environments/production
     #   targetRevision: HEAD
