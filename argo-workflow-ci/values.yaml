@@ -9,7 +9,7 @@ docker:
 
 github:
   # github repository owner
-  owner: krumIO
+  owner: slydiesel
   # the list of repositories to build on push events
   repositories:
     python-docs-hello-world:
