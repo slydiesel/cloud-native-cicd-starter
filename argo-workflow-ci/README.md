@@ -73,4 +73,4 @@ This chart contains configurable resources for defining CI and CD flows & proces
 
 # Diagram
 
-![CICD Diagram](https://github.com/krumIO/cloud-native-cicd-starter/blob/main/CICD_flow_diagram.png "Argo Events & Workflows CICD")
+![CICD Diagram](https://raw.githubusercontent.com/krumIO/cloud-native-cicd-starter/main/CICD_flow_diagram.png "Argo Events & Workflows CICD")
