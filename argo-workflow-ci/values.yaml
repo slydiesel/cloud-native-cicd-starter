@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 docker:
+  # server: docker-registry.131.153.227.137.sslip.io
   server: docker.io
   prefix: krumware/
   secretName: docker-push-user
