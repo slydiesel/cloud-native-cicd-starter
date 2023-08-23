@@ -3,7 +3,7 @@ image:
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
 
-  tag: "20230822T174939"
+  tag: "20230823T131240"
 imagePullSecrets:
   - name: nexus-push-user
 service:
