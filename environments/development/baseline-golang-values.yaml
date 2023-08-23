@@ -1,9 +1,9 @@
 image:
-  repository: docker-registry.131.153.227.137.sslip.io/baseline-golang-app
+  repository: krumware/baseline-golang-app
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
 
-  tag: "20230823T113923"
+  tag: "latest"
 imagePullSecrets:
   - name: nexus-push-user
 service:
