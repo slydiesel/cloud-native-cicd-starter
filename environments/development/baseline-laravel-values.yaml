@@ -22,8 +22,8 @@ ingress:
   tls: []
 resources:
   limits:
-    cpu: 200m
-    memory: 500Mi
+    cpu: 300m
+    memory: 800Mi
 
 autoscaling:
   enabled: false
