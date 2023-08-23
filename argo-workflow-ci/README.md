@@ -58,7 +58,7 @@ This chart contains configurable resources for defining CI and CD flows & proces
         - `github.deploymentFolderPath`
     - Target our newly created docker registry secret
         - `docker.secretName`
-        - `docker.owner`
+        - `docker.prefix`
     - Specify the hostname for our inbound webhook from Github
 
 
@@ -73,4 +73,4 @@ This chart contains configurable resources for defining CI and CD flows & proces
 
 # Diagram
 
-![CICD Diagram](../CICD_flow_diagram.png "Argo Events & Workflows CICD")
+![CICD Diagram](https://github.com/krumIO/cloud-native-cicd-starter/blob/main/CICD_flow_diagram.png "Argo Events & Workflows CICD")
